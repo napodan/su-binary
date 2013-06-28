@@ -58,15 +58,15 @@ enum {
 extern int send_intent(struct su_initiator *from, struct su_request *to, const char *socket_path, int allow, int type);
 
 #if 0
-#undef LOGE
-#define LOGE(fmt,args...) fprintf(stderr, fmt , ## args )
-#undef LOGD
-#define LOGD(fmt,args...) fprintf(stderr, fmt , ## args )
-#undef LOGW
-#define LOGW(fmt,args...) fprintf(stderr, fmt , ## args )
+#undef ALOGE
+#define ALOGE(fmt,args...) fprintf(stderr, fmt , ## args )
+#undef ALOGD
+#define ALOGD(fmt,args...) fprintf(stderr, fmt , ## args )
+#undef ALOGW
+#define ALOGW(fmt,args...) fprintf(stderr, fmt , ## args )
 #endif
 
-#define PLOGE(fmt,args...) LOGE(fmt " failed with %d: %s" , ## args , errno, strerror(errno))
-#define PLOGEV(fmt,err,args...) LOGE(fmt " failed with %d: %s" , ## args , err, strerror(err))
+#define PLOGE(fmt,args...) ALOGE(fmt " failed with %d: %s" , ## args , errno, strerror(errno))
+#define PLOGEV(fmt,err,args...) ALOGE(fmt " failed with %d: %s" , ## args , err, strerror(err))
 
 #endif

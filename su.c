@@ -270,7 +270,7 @@ static void deny(void)
     struct su_request *to = &su_to;
 
     send_intent(&su_from, &su_to, "", 0, 1);
-    LOGW("request rejected (%u->%u %s)", from->uid, to->uid, to->command);
+    ALOGW("request rejected (%u->%u %s)", from->uid, to->uid, to->command);
     fprintf(stderr, "%s\n", strerror(EACCES));
     exit(EXIT_FAILURE);
 }
@@ -290,7 +290,7 @@ static void allow(char *shell)
     setgroups(0, NULL);
     setresgid(to->uid, to->uid, to->uid);
     setresuid(to->uid, to->uid, to->uid);
-    LOGD("%u %s executing %u %s using shell %s : %s", from->uid, from->bin,
+    ALOGD("%u %s executing %u %s using shell %s : %s", from->uid, from->bin,
             to->uid, to->command, shell, exe);
     if (strcmp(to->command, DEFAULT_COMMAND)) {
         execl(shell, exe, "-c", to->command, (char*)NULL);
@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
 
     if (st.st_gid != st.st_uid)
     {
-        LOGE("Bad uid/gid %d/%d for Superuser Requestor application",
+        ALOGE("Bad uid/gid %d/%d for Superuser Requestor application",
                 (int)st.st_uid, (int)st.st_gid);
         deny();
     }
@@ -381,21 +381,21 @@ int main(int argc, char *argv[])
     setegid(st.st_gid);
     seteuid(st.st_uid);
 
-    LOGE("sudb - Opening database");
+    ALOGE("sudb - Opening database");
     db = database_init();
     if (!db) {
-        LOGE("sudb - Could not open database, prompt user");
+        ALOGE("sudb - Could not open database, prompt user");
         // if the database could not be opened, we can assume we need to
         // prompt the user
         dballow = DB_INTERACTIVE;
     } else {
-        LOGE("sudb - Database opened");
+        ALOGE("sudb - Database opened");
         dballow = database_check(db, &su_from, &su_to);
         // Close the database, we're done with it. If it stays open,
         // it will cause problems
         sqlite3_close(db);
         db = NULL;
-        LOGE("sudb - Database closed");
+        ALOGE("sudb - Database closed");
     }
 
     switch (dballow) {
@@ -434,7 +434,7 @@ int main(int argc, char *argv[])
     } else if (!strcmp(result, "ALLOW")) {
         allow(shell);
     } else {
-        LOGE("unknown response from Superuser Requestor: %s", result);
+        ALOGE("unknown response from Superuser Requestor: %s", result);
         deny();
     }
 

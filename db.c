@@ -33,7 +33,7 @@ sqlite3 *database_init()
 
     rc = sqlite3_open_v2(REQUESTOR_DATABASE_PATH, &db, SQLITE_OPEN_READONLY, NULL);
     if ( rc ) {
-        LOGE("Couldn't open database: %s", sqlite3_errmsg(db));
+        ALOGE("Couldn't open database: %s", sqlite3_errmsg(db));
         return NULL;
     }
 
@@ -62,9 +62,9 @@ int database_check(sqlite3 *db, struct su_initiator *from, struct su_request *to
         
     int error = sqlite3_get_table(db, sql, &result, &nrow, &ncol, &zErrmsg);
     if (error != SQLITE_OK) {
-        LOGE("Database check failed with error message %s", zErrmsg);
+        ALOGE("Database check failed with error message %s", zErrmsg);
         if (error == SQLITE_BUSY) {
-            LOGE("Specifically, the database is busy");
+            ALOGE("Specifically, the database is busy");
         }
         return DB_DENY;
     }
